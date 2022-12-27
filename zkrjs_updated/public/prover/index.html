@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Qubistry ZKSNARKs Test</title>
+		<link rel="icon" type="image/png" href="img/zokrates-128x128.png">
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+		<style>
+			body {
+				background-color: #303030;
+				display: table;
+				height: 100%;
+				width: 100%;
+			}
+			html {
+				height: 100%;
+				width: 100%;
+			}
+			#prover-data {
+				margin-bottom: .75rem;
+			}
+			#upload, #witness, #genproof, #sendproof {
+				width: 100%;
+			}
+			#upload-alert, #upload-loader, #witness-alert, #witness-loader, #genproof-alert, #genproof-loader, #sendproof-alert, #sendproof-loader {
+				display: none;
+			}
+			.action-container {
+				color: white;
+				margin-bottom: 2rem;
+				text-align: center;
+			}
+			.action-container > button, .action-container > div {
+				display: inline-block;
+				vertical-align: middle;
+			}
+			.alert {
+				padding: .375rem 1.25rem;
+			}
+			.alert-danger {
+				background-color: #721c24;
+				border-color: #721c24;
+				color: white;
+				margin: .5rem 0;
+			}
+			.alert-success {
+				color: white;
+				background-color: #458e56;
+				border-color: #458e56;
+				margin: .5rem 0;
+			}
+			.btn-primary {
+				color: white;
+				background-color: #375a7f;
+				border-color: #375a7f;
+			}
+			.btn:focus,.btn:active {
+				outline: none !important;
+				box-shadow: none;
+			}
+			.btn-primary:disabled, .btn-primary:disabled:hover {
+				background-color: #495e73;
+			    border-color: #495e73;
+			    cursor: default;
+			}
+			.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open>.dropdown-toggle.btn-primary {
+				color: white;
+				background-color: #2b4764;
+				border-color: #28415b;
+			}
+			.button-icon {
+				margin: 0 .2em;
+			}
+			.input-group-text {
+				background-color: #444;
+				border-color: #444;
+				color: #adb5bd;
+				text-align: center;
+				width: 2rem;
+			}
+			.mainContainer {
+				display: table-cell;
+				vertical-align: middle;
+			}
+			.secondaryContainer {
+				background-color: #222222;
+				display: block;
+				margin: 1em auto;
+				padding: 1em;
+				text-align: center;
+				width: 21em;
+			}
+			.witness-input {
+				margin: .5rem 0;
+			}
+			.zokrates-logo {
+				margin: 1em auto;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="mainContainer">
+			<div class="secondaryContainer">
+				<img class="zokrates-logo" src="img/zokrates-128x128.png"/>
+				<br>
+				<div class="action-container">
+					<input id="prover-data" name="prover-data" type="file" class="form-control" value="" disabled>
+					<button id="upload" class="btn btn-primary" disabled><i id="upload-icon" class="button-icon fa fa-upload"></i><img id="upload-loader" src="img/loader.gif"/> Upload Prover Data</button>
+					<div id="upload-alert" class="alert" role="alert">
+						<i class="fa fa-check"></i> Successful!
+					</div>
+				</div>
+				<div class="action-container">
+					<form class="witness-input">
+						<div class="input-group mb-3">
+							<div class="input-group-prepend">
+								<span class="input-group-text">a</span>
+							</div>
+							<input placeholder="" id="witness-a" name="a" required="" type="number" class="form-control" value="">
+						</div>
+						<div class="input-group mb-3">
+							<div class="input-group-prepend">
+								<span class="input-group-text">b</span>
+							</div>
+							<input placeholder="" id="witness-b" name="b" required="" type="number" class="form-control" value="">
+						</div>
+						<div class="input-group mb-3">
+							<div class="input-group-prepend">
+								<span class="input-group-text">c</span>
+							</div>
+							<input placeholder="" id="witness-c" name="c" required="" type="number" class="form-control" value="">
+						</div>
+						<div class="input-group mb-3">
+							<div class="input-group-prepend">
+								<span class="input-group-text">d</span>
+							</div>
+							<input placeholder="" id="witness-d" name="d" required="" type="number" class="form-control" value="">
+						</div>
+					</form>
+					<button id="witness" class="btn btn-primary" disabled><i id="witness-icon" class="button-icon fa fa-lightbulb-o"></i><img id="witness-loader" src="img/loader.gif"/> Compute Hash</button>
+					<div id="witness-alert" class="alert" role="alert">
+						<i class="fa fa-check"></i> Successful!
+					</div>
+				</div>
+				<div class="action-container">
+					<button id="genproof" class="btn btn-primary" disabled><i id="genproof-icon" class="button-icon fa fa-check-circle"></i><img id="genproof-loader" src="img/loader.gif"/> Generate Proof</button>
+					<div id="genproof-alert" class="alert" role="alert">
+						<i class="fa fa-check"></i> Successful!
+					</div>
+				</div>
+				<div class="action-container">
+					<button id="sendproof" class="btn btn-primary" disabled><i id="sendproof-icon" class="button-icon fa fa-certificate"></i><img id="sendproof-loader" src="img/loader.gif"/> Send Proof to Verifying Contract</button>
+					<div id="sendproof-alert" class="alert" role="alert">
+						<i class="fa fa-check"></i> Successful!
+					</div>
+				</div>
+				<!--<div class="action-container">
+					<button id="compile-verifier" class="btn btn-primary" disabled><i id="compile-verifier-icon" class="button-icon fa fa-refresh"></i><img id="compile-verifier-loader" src="img/loader.gif"/> Compile Verifier Script</button>
+					<div id="compile-verifier-alert" class="alert" role="alert">
+						<i class="fa fa-check"></i> Successful!
+					</div>
+				</div>
+				<div class="action-container">
+					<button id="setup" class="btn btn-primary" disabled><i id="setup-icon" class="button-icon fa fa-key"></i><img id="setup-loader" src="img/loader.gif"/> Setup Keys</button>
+					<div id="setup-alert" class="alert" role="alert">
+						<i class="fa fa-check"></i> Successful!
+					</div>
+				</div>
+				<div class="action-container">
+					<button id="contract" class="btn btn-primary" disabled><i id="contract-icon" class="button-icon fa fa-file-text"></i><img id="contract-loader" src="img/loader.gif"/> Deploy Verifier Contract</button>
+					<div id="contract-alert" class="alert" role="alert">
+						<i class="fa fa-check"></i> Successful!
+					</div>
+				</div>
+				<div class="action-container">
+					<button id="export-prover" class="btn btn-primary" disabled><i id="export-prover-icon" class="button-icon fa fa-download"></i><img id="export-prover-loader" src="img/loader.gif"/> Download Prover Data</button>
+					<div id="export-prover-alert" class="alert" role="alert">
+						<i class="fa fa-check"></i> Successful!
+					</div>
+				</div>-->
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="prover.js"></script>
+</html>
